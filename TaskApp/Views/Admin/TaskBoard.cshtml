@@ -1,0 +1,47 @@
+﻿@using TaskApp.Business.dto;
+@using TaskList.Business.Constants;
+@model IEnumerable<dtoTask>;
+
+@{
+    List<dtoTask> listOfTasks = new List<dtoTask>();
+    foreach (var tasks in Model)
+    {
+        listOfTasks.Add(tasks);
+    }
+
+    var sortedList = listOfTasks.OrderBy(x => x.Name).ToList();
+}
+
+@if (Model.Any())
+{
+    if (User.IsInRole(Roles.Admin))
+    {
+        <div class="text-center p-1">
+            @foreach (var task in listOfTasks)
+            {
+                <div class="row">
+                    <div class="col p-0">
+                        <a class="btn btn-primary rounded-0 w-100"
+               asp-controller="User" asp-action="TaskInformation" asp-route-id="@task.Id">
+                            @task.Name
+                        </a>
+                    </div>
+                    <div class="col col-lg-3 p-0">
+                        <p class="bg-primary m-0 w-100 h-100" id="taskListDate">
+                            @task.userName.Name |
+                            @task.Status
+                        </p>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            No Tasks Yet
+        </div>
+    </div>
+}

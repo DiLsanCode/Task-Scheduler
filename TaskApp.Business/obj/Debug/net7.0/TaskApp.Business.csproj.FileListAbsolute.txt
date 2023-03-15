@@ -1,0 +1,17 @@
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Business\obj\Debug\net7.0\TaskApp.Business.csproj.AssemblyReference.cache
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Business\obj\Debug\net7.0\TaskApp.Business.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Business\obj\Debug\net7.0\TaskApp.Business.AssemblyInfoInputs.cache
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Business\obj\Debug\net7.0\TaskApp.Business.AssemblyInfo.cs
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Business\obj\Debug\net7.0\TaskApp.Business.csproj.CoreCompileInputs.cache
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Business\bin\Debug\net7.0\TaskApp.Business.deps.json
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Business\bin\Debug\net7.0\TaskApp.Business.runtimeconfig.json
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Business\bin\Debug\net7.0\TaskApp.Business.dll
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Business\bin\Debug\net7.0\TaskApp.Business.pdb
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Business\obj\Debug\net7.0\TaskApp.Business.dll
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Business\obj\Debug\net7.0\refint\TaskApp.Business.dll
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Business\obj\Debug\net7.0\TaskApp.Business.pdb
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Business\obj\Debug\net7.0\TaskApp.Business.genruntimeconfig.cache
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Business\obj\Debug\net7.0\ref\TaskApp.Business.dll
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Business\bin\Debug\net7.0\TaskApp.Data.dll
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Business\bin\Debug\net7.0\TaskApp.Data.pdb
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Business\obj\Debug\net7.0\TaskApp.Business.csproj.CopyComplete

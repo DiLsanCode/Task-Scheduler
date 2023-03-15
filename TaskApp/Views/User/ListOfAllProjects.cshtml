@@ -1,0 +1,77 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using TaskApp.Business.dto;
+@using TaskList.Business.Constants;
+@using TaskList.Data.Models;
+@model IEnumerable<dtoProject>
+@{
+    ViewBag.Title = "Projects";
+}
+
+@{
+    List<dtoProject> listOfProjects = new List<dtoProject>();
+    foreach (var projects in Model)
+    {
+        listOfProjects.Add(projects);
+    }
+
+    var sortedList = listOfProjects.OrderBy(x => x.Name).ToList();
+    var counter = 1;
+}
+
+@section JavaScript
+    {
+    <script type="text/javascript" src="~/js/gridToList.js"></script>
+}
+
+@if (Model.Any())
+{
+    <div class="container-fluid">
+        <div class="row">
+            @foreach (var project in listOfProjects)
+            {
+                <div class="card col p-0 m-1 mb-3" id="list">
+                    <div class="card-header text-center">
+                        @project.Name
+                    </div>
+                    <div class="card-body p-0">
+                        <img src="\image\project_stock.jpg" class="w-100 h-100"></img>
+                    </div>
+                    <div class="card-footer text-center p-0">
+                        <a class="btn btn-primary rounded-0 w-100"
+                   asp-controller="User" asp-action="ListOfAllTasksFromProject" asp-route-projectId="@project.Id">
+                            Go To Tasks!
+                        </a>
+                        @if (User.IsInRole(Roles.Admin))
+                        {
+                            <div class="row w-100 m-0">
+                                <a class="btn col btn-warning rounded-0 w-50"
+                       asp-controller="Admin" asp-action="EditProject" asp-route-id="@project.Id">
+                                    Edit!
+                                </a>
+                                <form class="col w-50 p-0" method="post" asp-action="DeleteProject" asp-controller="Admin" asp-route-id="@project.Id" onclick="return confirm('Are you sure you want to delete this?')">
+                                    <button type="submit" class="btn btn-danger rounded-0 w-100">Delete!</button>
+                                </form>
+                            </div>
+                               
+                        }
+                    </div>
+                </div>
+                if (counter == 4)
+                {
+                    <div class="w-100"></div>
+                    counter = 0;
+                }
+                counter++;
+            }
+        </div>
+    </div>
+
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            No Projects Yet
+        </div>
+    </div>
+}

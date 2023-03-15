@@ -1,0 +1,58 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using TaskApp.Business.dto;
+@using TaskList.Business.Constants;
+@using TaskList.Data.Models;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@model dtoTask
+@section JavaScript {
+    <script src="~/js/taskInformation.js"></script>
+    <script src="~/js/clockedButton.js" data-m="@Model.Status"></script>
+}
+
+@{
+    User user = await UserManager.GetUserAsync(User);
+    var FiveDaysDue = Model.DateEnd.AddDays(-5);
+    var compareDates = DateTime.Compare(FiveDaysDue, DateTime.Today);
+    if (compareDates <= 0 && Model.Status != Status.Done.ToString())
+    {
+        <script src="~/js/textToDanger.js"></script>
+    }
+}
+
+<div class="row">
+    <div class="col">
+        <h1>@Model.Name</h1>
+        <p>@Model.Description</p>
+    </div>
+    <div class="col" id="newRow">
+        <div class="text-end">
+            <h3>Assigned To: @ViewBag.userList.Name</h3>
+            <h4>Created On: @Model.DateStart</h4>
+            <h4 id="dateend">Due To: @Model.DateEnd</h4>
+            <h4>Status: @Model.Status</h4>
+        </div>
+        <div class="row">
+            <div class="col p-0">
+                <form asp-controller="User" asp-action="UpdateStatus" asp-route-id="@Model.Id" asp-route-status="@Status.ToDo" asp-route-currentUser="@user.Id" method="post" class="p-0">
+                    <input type="submit" value="@Status.ToDo" id="todo" class="btn btn-outline-primary w-100" />
+                </form>
+            </div>
+            <div class="col p-0">
+                <form asp-controller="User" asp-action="UpdateStatus" asp-route-id="@Model.Id" asp-route-status="@Status.InProgress" asp-route-currentUser="@user.Id" method="post" class="p-0">
+                    <input type="submit" value="@Status.InProgress" id="inprogress" class="btn btn-outline-primary w-100" />
+                </form>
+            </div>
+            <div class="col p-0">
+                <form asp-controller="User" asp-action="UpdateStatus" asp-route-id="@Model.Id" asp-route-status="@Status.InReview" asp-route-currentUser="@user.Id" method="post" class="p-0">
+                    <input type="submit" value="@Status.InReview" id="inreview" class="btn btn-outline-primary w-100" />
+                </form>
+            </div>
+            <div class="col p-0">
+                <form asp-controller="User" asp-action="UpdateStatus" asp-route-id="@Model.Id" asp-route-status="@Status.Done" asp-route-currentUser="@user.Id" method="post" class="p-0">
+                    <input type="submit" value="@Status.Done" id="done" class="btn btn-outline-primary w-100" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

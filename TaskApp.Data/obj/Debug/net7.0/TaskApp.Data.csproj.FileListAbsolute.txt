@@ -1,0 +1,14 @@
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Data\obj\Debug\net7.0\TaskApp.Data.csproj.AssemblyReference.cache
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Data\obj\Debug\net7.0\TaskApp.Data.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Data\obj\Debug\net7.0\TaskApp.Data.AssemblyInfoInputs.cache
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Data\obj\Debug\net7.0\TaskApp.Data.AssemblyInfo.cs
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Data\obj\Debug\net7.0\TaskApp.Data.csproj.CoreCompileInputs.cache
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Data\bin\Debug\net7.0\TaskApp.Data.deps.json
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Data\bin\Debug\net7.0\TaskApp.Data.runtimeconfig.json
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Data\bin\Debug\net7.0\TaskApp.Data.dll
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Data\bin\Debug\net7.0\TaskApp.Data.pdb
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Data\obj\Debug\net7.0\TaskApp.Data.dll
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Data\obj\Debug\net7.0\refint\TaskApp.Data.dll
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Data\obj\Debug\net7.0\TaskApp.Data.pdb
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Data\obj\Debug\net7.0\TaskApp.Data.genruntimeconfig.cache
+C:\Users\Dilsan\Desktop\New folder\TaskApp\TaskApp.Data\obj\Debug\net7.0\ref\TaskApp.Data.dll
