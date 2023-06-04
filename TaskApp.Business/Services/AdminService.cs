@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TaskApp.Business.dto;
 using TaskApp.Business.Interfaces;
+using TaskApp.Data.Models;
 using TaskList.Business.Constants;
 using TaskList.Data.Data;
 using TaskList.Data.Models;
@@ -16,13 +17,10 @@ namespace TaskApp.Business.Services
     public class AdminService : IAdminService
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly INamingService _naming;
 
-        public AdminService(ApplicationDbContext dbContext,
-                            INamingService naming)
+        public AdminService(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
-            _naming = naming;
         }
 
         public async Task<Project> AddNewProject(dtoProject project)
@@ -83,12 +81,23 @@ namespace TaskApp.Business.Services
         public async Task DeleteProject(int id)
         {
             var proojectToRemove = await _dbContext.Projects
-               .FirstOrDefaultAsync(x => x.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            var tasks = await _dbContext.Tasks
+                .Include(c => c.Comments)
+                .Where(c => c.ProjectId == id)
+                .ToListAsync();
 
             if (proojectToRemove == null)
             {
                 throw new Exception("'Participant Not Found");
             }
+
+            foreach (var task in tasks)
+            {
+                _dbContext.Comments.RemoveRange(task.Comments);
+            }
+            await _dbContext.SaveChangesAsync();
 
             _dbContext.Projects.Remove(proojectToRemove);
             await _dbContext.SaveChangesAsync();
@@ -155,11 +164,16 @@ namespace TaskApp.Business.Services
             var taskToRemove = await _dbContext.Tasks
                .FirstOrDefaultAsync(x => x.Id == id);
 
+            var commentForEdit = await _dbContext.Comments
+                .Where(c => c.AssignmentId == taskToRemove.Id)
+            .ToListAsync();
+
             if (taskToRemove == null)
             {
                 throw new Exception("Task Not Found");
             }
 
+            _dbContext.Comments.RemoveRange(commentForEdit);
             _dbContext.Tasks.Remove(taskToRemove);
             await _dbContext.SaveChangesAsync();
         }

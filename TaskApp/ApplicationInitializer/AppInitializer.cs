@@ -31,8 +31,8 @@ namespace VotingApp.ApplicationInitializer
             await ApplyMigrationsAsync();
             await SeedRolesAsync();
             await SeedUsersAsync();
-            //await SeedProjectsAsync();
-            //await SeedTasksAsync();
+            await SeedProjectsAsync();
+            await SeedTasksAsync();
         }
 
         private async Task ApplyMigrationsAsync()
@@ -87,7 +87,7 @@ namespace VotingApp.ApplicationInitializer
                     await _dbContext.Tasks.AddAsync(new Assignment()
                     {
                         Name = $"Task {i}",
-                        UserId = 1,
+                        UserId = 2,
                         ProjectId = project.Id,
                         Description = $"Description {i}",
                         Status = Status.ToDo.ToString(),
@@ -96,6 +96,7 @@ namespace VotingApp.ApplicationInitializer
                     });
                 }
             }
+            await _dbContext.SaveChangesAsync();
         }
 
         private async Task SeedUsersAsync()

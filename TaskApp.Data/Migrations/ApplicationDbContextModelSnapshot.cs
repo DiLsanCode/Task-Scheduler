@@ -133,7 +133,7 @@ namespace TaskApp.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("TaskId")
+                    b.Property<int?>("AssignmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -145,7 +145,7 @@ namespace TaskApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TaskId");
+                    b.HasIndex("AssignmentId");
 
                     b.HasIndex("UserId");
 
@@ -373,9 +373,10 @@ namespace TaskApp.Data.Migrations
 
             modelBuilder.Entity("TaskApp.Data.Models.Comment", b =>
                 {
-                    b.HasOne("TaskList.Data.Models.Assignment", "Task")
-                        .WithMany()
-                        .HasForeignKey("TaskId");
+                    b.HasOne("TaskList.Data.Models.Assignment", "Assignment")
+                        .WithMany("Comments")
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("TaskList.Data.Models.User", "User")
                         .WithMany()
@@ -383,7 +384,7 @@ namespace TaskApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Task");
+                    b.Navigation("Assignment");
 
                     b.Navigation("User");
                 });
@@ -405,6 +406,11 @@ namespace TaskApp.Data.Migrations
                     b.Navigation("Project");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TaskList.Data.Models.Assignment", b =>
+                {
+                    b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("TaskList.Data.Models.Project", b =>

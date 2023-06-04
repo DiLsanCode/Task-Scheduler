@@ -14,6 +14,7 @@
     User user = await UserManager.GetUserAsync(User);
     var FiveDaysDue = Model.DateEnd.AddDays(-5);
     var compareDates = DateTime.Compare(FiveDaysDue, DateTime.Today);
+    List<dtoComment> comments = ViewBag.comments;
     if (compareDates <= 0 && Model.Status != Status.Done.ToString())
     {
         <script src="~/js/textToDanger.js"></script>
@@ -27,7 +28,7 @@
     </div>
     <div class="col" id="newRow">
         <div class="text-end">
-            <h3>Assigned To: @ViewBag.userList.Name</h3>
+            <h3>Assigned To: @ViewBag.user.Name</h3>
             <h4>Created On: @Model.DateStart</h4>
             <h4 id="dateend">Due To: @Model.DateEnd</h4>
             <h4>Status: @Model.Status</h4>
@@ -51,6 +52,38 @@
             <div class="col p-0">
                 <form asp-controller="User" asp-action="UpdateStatus" asp-route-id="@Model.Id" asp-route-status="@Status.Done" asp-route-currentUser="@user.Id" method="post" class="p-0">
                     <input type="submit" value="@Status.Done" id="done" class="btn btn-outline-primary w-100" />
+                </form>
+            </div>
+        </div>
+
+        <br></br>
+        <div class="comment-section">
+            <div class="comments-discussion">
+                @foreach (var comment in comments)
+                {
+                    @if (comment.UserId == user.Id)
+                    {
+                        <div class="comment" style="text-align:right">
+                            <p style="color:grey; margin:0"><em>@comment.UserName</em></p>
+                            <p>@comment.Text</p>
+                            <hr style="color:lightgray"></hr>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="comment">
+                            <p style="color:grey; margin:0"><em>@comment.UserName</em></p>
+                            <p>@comment.Text</p>
+                            <hr style="color:lightgray"></hr>
+                        </div>
+                    }
+                }
+            </div>
+
+            <div class="comment-input">
+                <form asp-controller="User" asp-action="AddComment" method="post" class="px-3" asp-route-userId="@user.Id" asp-route-taskId="@Model.Id">
+                    <textarea class="form-control" id="textAreaExample" rows="4" style="background: #fff;" name="text"></textarea>
+                    <input type="submit" value="Post" class="btn btn-outline-primary float-end" />
                 </form>
             </div>
         </div>

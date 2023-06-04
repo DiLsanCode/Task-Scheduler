@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,10 +13,10 @@ namespace TaskApp.Data.Models
     {
         public int Id { get; set; }
         public string Text { get; set; }
-        public int? TaskId { get; set; }
+        public int? AssignmentId { get; set; }
         public int UserId { get; set; }
-        public virtual Assignment Task { get; set; }
-        public virtual User User { get; set; }
+        public Assignment? Assignment { get; set; }
+        public User User { get; set; } = null!;
 
     }
 }

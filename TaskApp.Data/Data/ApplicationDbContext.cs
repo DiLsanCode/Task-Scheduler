@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using TaskApp.Data.Models;
@@ -19,11 +20,18 @@ namespace TaskList.Data.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Comment>()
+                .HasOne(c => c.Assignment)
+                .WithMany(c => c.Comments)
+                .OnDelete(DeleteBehavior.NoAction);
+
             base.OnModelCreating(builder);
         }
+
     }
 }
