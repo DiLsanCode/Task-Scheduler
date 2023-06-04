@@ -10,6 +10,6 @@ namespace TaskList.Data.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<Assignment> Tasks { get; set; }
+        public ICollection<Assignment> Tasks { get; set; } = new List<Assignment>();
     }
 }

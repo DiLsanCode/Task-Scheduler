@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TaskApp.Business.dto;
 using TaskApp.Business.Interfaces;
+using TaskApp.Data.Models;
 using TaskList.Business.Constants;
 using TaskList.Data.Data;
 using TaskList.Data.Models;
@@ -16,13 +17,10 @@ namespace TaskApp.Business.Services
     public class UserService : IUserService
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly INamingService _naming;
 
-        public UserService(ApplicationDbContext dbContext,
-                            INamingService naming)
+        public UserService(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
-            _naming = naming;
         }
 
         public async Task<IEnumerable<dtoProject>> GetAllProjects()
@@ -134,7 +132,7 @@ namespace TaskApp.Business.Services
                 .Select(x => new dtoUser
                 {
                     Id = x.Id,
-                    Name = x.FirstName + " " + x.MiddleName + " " + x.LastName,
+                    Name = x.FirstName + " " + x.LastName,
                 }).FirstOrDefaultAsync(x => x.Id == id);
 
             if (user == null)
@@ -159,5 +157,33 @@ namespace TaskApp.Business.Services
             return status;
         }
 
+        public async Task<Comment> AddComment(string text, int userId, int taskId)
+        {
+            var newComment = await _dbContext.AddAsync(new Comment()
+            {
+                Text = text,
+                UserId = userId,
+                AssignmentId = taskId,
+            });
+
+            await _dbContext.SaveChangesAsync();
+            return newComment.Entity;
+        }
+
+        public async Task<IEnumerable<dtoComment>> GetComments(int id)
+        {
+            var comments = await _dbContext.Comments
+                .Select(p => new dtoComment
+                {
+                    Text = p.Text,
+                    UserId = p.UserId,
+                    TaskId = p.AssignmentId,
+                    UserName = p.User.FirstName + " " + p.User.LastName,
+                })
+                .Where(c => c.TaskId == id)
+                .ToListAsync();
+
+            return comments;
+        }
     }
 }

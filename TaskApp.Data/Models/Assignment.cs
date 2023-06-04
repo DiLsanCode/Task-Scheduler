@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskApp.Data.Models;
 
 namespace TaskList.Data.Models
 {
@@ -16,7 +17,8 @@ namespace TaskList.Data.Models
         public string Status { get; set; }
         public DateTime DateStart { get; set; }
         public DateTime DateEnd { get; set; }
-        public virtual User User { get; set; }
-        public virtual Project Project { get; set; }
+        public User User { get; set; } = null!;
+        public Project Project { get; set; } = null!;
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }
