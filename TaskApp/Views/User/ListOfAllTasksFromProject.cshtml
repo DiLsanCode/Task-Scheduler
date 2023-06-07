@@ -20,7 +20,8 @@
     User user = await UserManager.GetUserAsync(User);
     var sortedList = listOfTasks.OrderBy(x => x.Name).ToList();
     var userTasks = listOfTasks.Where(x => x.UserId == user.Id).OrderBy(x => x.Name).ToList();
-
+    int counter = 1;
+    List<int> ints = new List<int>();
 }
 
 @if (Model.Any())
@@ -33,22 +34,18 @@
                 <div class="row">
                     <div class="col p-0">
                         <a class="btn btn-primary rounded-0 w-100 h-100"
-               asp-controller="User" asp-action="TaskInformation" asp-route-id="@task.Id">
+                           asp-controller="User" asp-action="TaskInformation" asp-route-id="@task.Id">
                             @task.Name
                         </a>
                     </div>
                     <div class="col col-lg-3 p-0">
-                        <p class="bg-primary m-0 w-100 h-100" id="taskListDate">
+                        <p class="bg-primary m-0 w-100 h-100" id="@("taskListDate" + @counter)">
                             @{
                                 var FiveDaysDue = task.DateEnd.AddDays(-5);
                                 var compareDates = DateTime.Compare(FiveDaysDue, DateTime.Today);
                                 if (compareDates <= 0 && task.Status != Status.Done.ToString())
                                 {
-                                    <script>
-                                        $(document).ready(function () {
-                                            $("#taskListDate").toggleClass("bg-primary");
-                                            $("#taskListDate").toggleClass("bg-danger");
-                                        });</script>
+                                    ints.Add(counter);
                                 }
                             }
                             @task.userName.Name |
@@ -58,7 +55,7 @@
                     </div>
                     <div class="col col-lg-2 p-0 ">
                         <a class="btn btn-warning rounded-0 w-50 h-100 float-start"
-               asp-controller="Admin" asp-action="EditTask" asp-route-id="@task.Id">
+                           asp-controller="Admin" asp-action="EditTask" asp-route-id="@task.Id">
                             Edit!
                         </a>
                         <form class="w-50 h-100 p-0 float-end" method="post" asp-action="DeleteTask" asp-controller="Admin" asp-route-id="@task.Id" onclick="return confirm('Are you sure you want to delete this?')">
@@ -66,6 +63,8 @@
                         </form>
                     </div>
                 </div>
+
+                counter++;
             }
         </div>
     }
@@ -77,22 +76,18 @@
                 <div class="row">
                     <div class="col p-0">
                         <a class="btn btn-primary rounded-0 w-100"
-               asp-controller="User" asp-action="TaskInformation" asp-route-id="@task.Id">
+                           asp-controller="User" asp-action="TaskInformation" asp-route-id="@task.Id">
                             @task.Name
                         </a>
                     </div>
                     <div class="col col-lg-3 p-0">
-                        <p class="bg-primary m-0 w-100 h-100" id="taskListDate">
+                        <p class="bg-primary m-0 w-100 h-100" id="@("taskListDate" + @counter)">
                             @{
                                 var FiveDaysDue = task.DateEnd.AddDays(-5);
                                 var compareDates = DateTime.Compare(FiveDaysDue, DateTime.Today);
                                 if (compareDates <= 0 && task.Status != Status.Done.ToString())
                                 {
-                                    <script>
-                                        $(document).ready(function () {
-                                            $("#taskListDate").toggleClass("bg-primary");
-                                            $("#taskListDate").toggleClass("bg-danger");
-                                        });</script>
+                                    ints.Add(counter);
                                 }
                             }
                             @task.userName.Name |
@@ -104,6 +99,7 @@
             }
         </div>
     }
+    <script type="text/javascript" src="~/js/taskDanger.js" data-m="@Html.Raw(Json.Serialize(ints.ToArray()))"></script>
 }
 else
 {

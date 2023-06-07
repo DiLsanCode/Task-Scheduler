@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using TaskApp.Business.dto;
 using TaskApp.Business.Interfaces;
 using TaskApp.Business.Services;
@@ -18,25 +19,47 @@ namespace TaskApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddNewProject() { return View(); }
+        public IActionResult AddNewProject() 
+        {
+            IEnumerable<ModelError> allErrors = ModelState.Values.SelectMany(v => v.Errors);
+            ViewBag.errors = allErrors.ToList();
+            return View(); 
+        }
 
         [HttpPost]
         public async Task<IActionResult> AddNewProject(dtoProject newProject)
         {
             if (ModelState.IsValid)
             {
-                await _adminService.AddNewProject(newProject);
-                return RedirectToAction("ListOfAllProjects", "User");
+                var existingProject = await _adminService.GetProjectByName(newProject.Name);
+                if(existingProject == null)
+                {
+                    await _adminService.AddNewProject(newProject);
+                    return RedirectToAction("ListOfAllProjects", "User");
+                }
+                else
+                {
+                    ModelState.AddModelError("PropertyNameInViewModelToBeHighlighted", "Project with that name already exists!");
+                }
             }
+            IEnumerable<ModelError> allErrors = ModelState.Values.SelectMany(v => v.Errors);
+            ViewBag.errors = allErrors.ToList();
             return View();
         }
 
         [HttpGet]
         public async Task<IActionResult> AddNewTaskToProject(int id)
         {
+
             ViewBag.userList = await _adminService.GetListOfUsers();
             ViewBag.statusList = _adminService.StatusList();
             ViewBag.currentProjectId = id;
+            if(id == 0)
+            {
+                ModelState.AddModelError("PropertyNameInViewModelToBeHighlighted", "Project was not selected!");
+                IEnumerable<ModelError> allErrors = ModelState.Values.SelectMany(v => v.Errors);
+                ViewBag.errors = allErrors.ToList();
+            }
             return View();
         }
 
@@ -45,7 +68,10 @@ namespace TaskApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _adminService.AddNewTask(newTask);
+                if(newTask.Id != 0)
+                {
+                    await _adminService.AddNewTask(newTask);
+                }
                 return RedirectToAction("AddNewTaskToProject", "Admin");
             }
             return View();
@@ -83,12 +109,25 @@ namespace TaskApp.Controllers
         [HttpPost]
         public async Task<IActionResult> EditProject(int id, dtoProject project)
         {
+            var currentProject = await _adminService.GetProjectById(id);
             if (ModelState.IsValid)
             {
-                await _adminService.EditProject(id, project);
-                return RedirectToAction("ListOfAllProjects", "User");
+                var existingProject = await _adminService.GetProjectByName(project.Name);
+
+                if (existingProject == null)
+                {
+                    await _adminService.EditProject(id, project);
+                    return RedirectToAction("ListOfAllProjects", "User");
+                }
+                else
+                {
+                    ModelState.AddModelError("PropertyNameInViewModelToBeHighlighted", "There is project with that name!");
+                    IEnumerable<ModelError> allErrors = ModelState.Values.SelectMany(v => v.Errors);
+                    ViewBag.errors = allErrors.ToList();
+                }
+
             }
-            return View();
+            return View(currentProject);
         }
 
         [HttpGet]

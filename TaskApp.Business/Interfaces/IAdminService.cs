@@ -24,5 +24,6 @@ namespace TaskApp.Business.Interfaces
         Task DeleteTask(int id);
         Task EditTask(int id, dtoTask task);
         Task<IEnumerable<dtoTask>> GetInReviewTask();
+        Task<dtoProject> GetProjectByName(string name);
     }
 }

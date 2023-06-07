@@ -78,6 +78,18 @@ namespace TaskApp.Business.Services
             return project;
         }
 
+        public async Task<dtoProject> GetProjectByName(string name)
+        {
+            var project = await _dbContext.Projects
+                .Select(x => new dtoProject
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                }).FirstOrDefaultAsync(x => x.Name == name);
+
+            return project;
+        }
+
         public async Task DeleteProject(int id)
         {
             var proojectToRemove = await _dbContext.Projects
@@ -90,7 +102,7 @@ namespace TaskApp.Business.Services
 
             if (proojectToRemove == null)
             {
-                throw new Exception("'Participant Not Found");
+                throw new Exception("Participant Not Found");
             }
 
             foreach (var task in tasks)
@@ -107,13 +119,23 @@ namespace TaskApp.Business.Services
         {
             var projectToEdit = await _dbContext.Projects
                .FirstOrDefaultAsync(x => x.Id == id);
+            var projectWithSimilarName = await _dbContext.Projects
+                .FirstOrDefaultAsync(x => x.Name == project.Name);
 
             if (projectToEdit != null)
             {
-                projectToEdit.Name = project.Name;
+                if(projectWithSimilarName == null)
+                {
+                    projectToEdit.Name = project.Name;
 
-                _dbContext.Projects.Update(projectToEdit);
-                await _dbContext.SaveChangesAsync();
+                    _dbContext.Projects.Update(projectToEdit);
+                    await _dbContext.SaveChangesAsync();
+                }
+                else
+                {
+                    throw new Exception("There is project with that name!");
+                }
+                
             }
             else
             {
