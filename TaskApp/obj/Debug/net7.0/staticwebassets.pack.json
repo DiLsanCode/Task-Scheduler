@@ -29,6 +29,10 @@
       "PackagePath": "staticwebassets\\js\\site.js"
     },
     {
+      "Id": "C:\\Users\\Dilsan\\Documents\\Task-Scheduler\\TaskApp\\wwwroot\\js\\taskDanger.js",
+      "PackagePath": "staticwebassets\\js\\taskDanger.js"
+    },
+    {
       "Id": "C:\\Users\\Dilsan\\Documents\\Task-Scheduler\\TaskApp\\wwwroot\\js\\taskInformation.js",
       "PackagePath": "staticwebassets\\js\\taskInformation.js"
     },

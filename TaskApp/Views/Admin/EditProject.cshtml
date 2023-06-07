@@ -16,6 +16,15 @@
                 <label asp-for="Name"></label>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+            <div class="errors">
+                @if (ViewBag.errors != null)
+                {
+                    @foreach (var error in ViewBag.errors)
+                    {
+                        <p class="alert-danger">@error.ErrorMessage</p>
+                    }
+                }
+            </div>
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary mb-2">Add</button>
             <a class="w-100 btn btn-outline-dark mb-2" asp-area="" asp-controller="User" asp-action="ListOfAllProjects">Cancel</a>
         </form>
