@@ -26,35 +26,42 @@
                     <ul class="navbar-nav flex-grow-1">
                         @if (User.IsInRole(Roles.Admin))
                         {
-                            <li>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Admin
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a class="dropdown-item"
-                                           asp-controller="Admin" asp-action="AddNewProject">
-                                                Add New Project
+                                <li>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Admin
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item"
+                                               asp-controller="Admin" asp-action="AddNewProject">
+                                                    Add New Project
+                                                </a>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <a class="dropdown-item" style="width:auto"
+                                               asp-controller="Admin" asp-action="AddNewTaskToProject" asp-route-id="@ViewBag.currentProjectId">
+                                                    Add New Task
+                                                </a>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <a class="dropdown-item" style="width:auto"
+                                               asp-controller="Admin" asp-action="TaskBoard">
+                                                    Go To Board
+                                                </a>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <a class="dropdown-item" style="width:auto"
+                                                asp-area="Identity" asp-page="/Account/Register">
+                                                Register
                                             </a>
-                                        </li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li>
-                                            <a class="dropdown-item" style="width:auto"
-                                           asp-controller="Admin" asp-action="AddNewTaskToProject" asp-route-id="@ViewBag.currentProjectId">
-                                                Add New Task
-                                            </a>
-                                        </li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li>
-                                            <a class="dropdown-item" style="width:auto"
-                                           asp-controller="Admin" asp-action="TaskBoard">
-                                                Go To Board
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
                         }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
