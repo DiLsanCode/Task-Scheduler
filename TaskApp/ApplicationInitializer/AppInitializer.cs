@@ -58,16 +58,27 @@ namespace VotingApp.ApplicationInitializer
 
         private async Task SeedProjectsAsync()
         {
+            string[] projectNames = { "SLOW CARE",
+                "POSSESSIVE NATION",
+                "BOUNCY INK",
+                "POETIC CREAM",
+                "GUARDED ROOT",
+                "DOMINEERING PORTER",
+                "GUARDED AUTHORITY",
+                "OBSOLETE MUSCLE",
+                "REDUNDANT CARRIAGE",
+                "LUMPY ROBIN" };
+
             if (await _dbContext.Projects.AnyAsync())
             {
                 return;
             }
 
-            for (int i = 1; i < 7; i++)
+            for (int i = 1; i < 10; i++)
             {
                 await _dbContext.Projects.AddAsync(new Project()
                 {
-                    Name = $"Project {i}",
+                    Name = $"{projectNames[i]}",
                 });
             }
             await _dbContext.SaveChangesAsync();
@@ -75,6 +86,20 @@ namespace VotingApp.ApplicationInitializer
 
         private async Task SeedTasksAsync()
         {
+            Random random = new Random();
+            string[] taskNames = { "Convert Age to Days",
+            "Return the Sum of Two Numbers",
+            "Convert Minutes into Seconds",
+            "Return the Next Number from the Integer Passed",
+            "Area of a Triangle"
+            };
+            string[] taskDescriptions = { "Create a function that takes the age in years and returns the age in days.",
+            "Create a function that takes two numbers as arguments and returns their sum.",
+            "Write a function that takes an integer minutes and converts it to seconds.",
+            "Create a function that takes a number as an argument, increments the number by +1 and returns the result.",
+            "Write a function that takes the base and height of a triangle and return its area."
+            };
+
             if (await _dbContext.Tasks.AnyAsync())
             {
                 return;
@@ -82,14 +107,14 @@ namespace VotingApp.ApplicationInitializer
 
             foreach (Project project in _dbContext.Projects)
             {
-                for (int i = 1; i <= 3; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     await _dbContext.Tasks.AddAsync(new Assignment()
                     {
-                        Name = $"Task {i}",
-                        UserId = 2,
-                        ProjectId = project.Id,
-                        Description = $"Description {i}",
+                        Name = $"{taskNames[i]}",
+                        UserId = random.Next(3, 8),
+                        ProjectId = random.Next(1, 10),
+                        Description = $"{taskDescriptions[i]}",
                         Status = Status.ToDo.ToString(),
                         DateStart = DateTime.Now,
                         DateEnd = DateTime.Now.AddDays(14),
@@ -101,6 +126,10 @@ namespace VotingApp.ApplicationInitializer
 
         private async Task SeedUsersAsync()
         {
+            string[] firstName = { "Антон", "Алекса", "Звездиян", "Добринка", "Спартак", "Николет" };
+            string[] middleName = { "Николов", "Георгиева", "Божинов", "Каменова", "Андреев", "Попова" };
+            string[] lastName = { "Котев", "Арнаудова", "Събев", "Михайлова", "Пешев", "Иванова" };
+
             if (await _dbContext.Users.AnyAsync())
             {
                 return;
@@ -119,7 +148,7 @@ namespace VotingApp.ApplicationInitializer
             await _userManager.CreateAsync(adminUser, "12345dD!");
             await _userManager.AddToRoleAsync(adminUser, Roles.Admin);
 
-            var user = new User
+                var user = new User
             {
                 Email = "user@user.com",
                 FirstName = "User",
@@ -131,6 +160,21 @@ namespace VotingApp.ApplicationInitializer
 
             await _userManager.CreateAsync(user, "12345dD!");
             await _userManager.AddToRoleAsync(user, Roles.User);
+
+            for (int i = 0; i < 6; i++)
+            {
+                var users = new User
+                {
+                    Email = $"user{i}@user.com",
+                    FirstName = $"{firstName[i]}",
+                    MiddleName = $"{middleName[i]}",
+                    LastName = $"{lastName[i]}",
+                    EmailConfirmed = true,
+                    UserName = $"user{i}@user.com",
+                };
+                await _userManager.CreateAsync(users, "12345dD!");
+                await _userManager.AddToRoleAsync(users, Roles.User);
+            }
 
         }
     }
