@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "mZWIpXiH9q11SbbwkHaRp2hKC8ztxkJ6g6LCd9qcIds=",
+  "Hash": "1cWPouvJqSBGaxTL9+bWGn8AVmDdgzNpVhlxcnFW2QY=",
   "Source": "TaskApp",
   "BasePath": "_content/TaskApp",
   "Mode": "Default",
@@ -1103,6 +1103,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\Dilsan\\Documents\\Task-Scheduler\\TaskApp\\wwwroot\\image\\bg.png",
+      "SourceId": "TaskApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Dilsan\\Documents\\Task-Scheduler\\TaskApp\\wwwroot\\",
+      "BasePath": "_content/TaskApp",
+      "RelativePath": "image/bg.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\image\\bg.png"
     },
     {
       "Identity": "C:\\Users\\Dilsan\\Documents\\Task-Scheduler\\TaskApp\\wwwroot\\image\\project_stock.jpg",

@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\Dilsan\\Documents\\Task-Scheduler\\TaskApp\\wwwroot\\image\\bg.png",
+      "PackagePath": "staticwebassets\\image\\bg.png"
+    },
+    {
       "Id": "C:\\Users\\Dilsan\\Documents\\Task-Scheduler\\TaskApp\\wwwroot\\image\\project_stock.jpg",
       "PackagePath": "staticwebassets\\image\\project_stock.jpg"
     },
