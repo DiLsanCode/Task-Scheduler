@@ -18,5 +18,8 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    background-image: url('/image/bg.png');
+    background-attachment:fixed;
+    margin-bottom: 60px;
+    font-family:"Calibri", sans-serif;
 }

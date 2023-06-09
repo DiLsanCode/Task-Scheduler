@@ -8,7 +8,7 @@
     <title>@ViewData["Title"] - TaskApp</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/radioButtons.css" asp-append-version="true" />
+    @*<link rel="stylesheet" href="~/css/radioButtons.css" asp-append-version="true" />*@
     <link rel="stylesheet" href="~/TaskApp.styles.css" asp-append-version="true" />
     <script type="text/javascript" src="/lib/jquery/dist/jquery.min.js"></script>
     @RenderSection("JavaScript", required: false)
@@ -88,7 +88,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer text-muted">
         <div class="container">
             &copy; 2023 - TaskApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
