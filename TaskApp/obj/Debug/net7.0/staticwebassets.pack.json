@@ -5,12 +5,20 @@
       "PackagePath": "staticwebassets\\TaskApp.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\Dilsan\\Documents\\Task-Scheduler\\TaskApp\\wwwroot\\css\\colorScheme.css",
+      "PackagePath": "staticwebassets\\css\\colorScheme.css"
+    },
+    {
       "Id": "C:\\Users\\Dilsan\\Documents\\Task-Scheduler\\TaskApp\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
       "Id": "C:\\Users\\Dilsan\\Documents\\Task-Scheduler\\TaskApp\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Users\\Dilsan\\Documents\\Task-Scheduler\\TaskApp\\wwwroot\\image\\9868004_4277097.jpg",
+      "PackagePath": "staticwebassets\\image\\9868004_4277097.jpg"
     },
     {
       "Id": "C:\\Users\\Dilsan\\Documents\\Task-Scheduler\\TaskApp\\wwwroot\\image\\bg.png",

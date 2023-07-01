@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "1cWPouvJqSBGaxTL9+bWGn8AVmDdgzNpVhlxcnFW2QY=",
+  "Hash": "VsrjUrC58zgtlwagjWKIUJAgf0jRX44s+BKbSitulMU=",
   "Source": "TaskApp",
   "BasePath": "_content/TaskApp",
   "Mode": "Default",
@@ -1071,6 +1071,23 @@
       "OriginalItemSpec": "C:\\Users\\Dilsan\\Documents\\Task-Scheduler\\TaskApp\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\TaskApp.bundle.scp.css"
     },
     {
+      "Identity": "C:\\Users\\Dilsan\\Documents\\Task-Scheduler\\TaskApp\\wwwroot\\css\\colorScheme.css",
+      "SourceId": "TaskApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Dilsan\\Documents\\Task-Scheduler\\TaskApp\\wwwroot\\",
+      "BasePath": "_content/TaskApp",
+      "RelativePath": "css/colorScheme.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\colorScheme.css"
+    },
+    {
       "Identity": "C:\\Users\\Dilsan\\Documents\\Task-Scheduler\\TaskApp\\wwwroot\\css\\site.css",
       "SourceId": "TaskApp",
       "SourceType": "Discovered",
@@ -1103,6 +1120,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\Dilsan\\Documents\\Task-Scheduler\\TaskApp\\wwwroot\\image\\9868004_4277097.jpg",
+      "SourceId": "TaskApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Dilsan\\Documents\\Task-Scheduler\\TaskApp\\wwwroot\\",
+      "BasePath": "_content/TaskApp",
+      "RelativePath": "image/9868004_4277097.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\image\\9868004_4277097.jpg"
     },
     {
       "Identity": "C:\\Users\\Dilsan\\Documents\\Task-Scheduler\\TaskApp\\wwwroot\\image\\bg.png",

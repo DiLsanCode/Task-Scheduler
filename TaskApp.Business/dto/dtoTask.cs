@@ -24,10 +24,13 @@ namespace TaskApp.Business.dto
         public int UserId { get; set; }
 
         [Required]
-        public int ProjectId { get; set; }
+        public int SprintId { get; set; }
 
         [Required]
         public string Status { get; set; }
+
+        [Required]
+        public string Score { get; set; }
 
         [Required]
         public DateTime DateStart { get; set; }

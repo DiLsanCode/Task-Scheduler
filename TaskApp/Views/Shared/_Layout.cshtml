@@ -13,11 +13,14 @@
     <script type="text/javascript" src="/lib/jquery/dist/jquery.min.js"></script>
     @RenderSection("JavaScript", required: false)
 </head>
+@{
+    var pageName = ViewContext.RouteData.Values["action"].ToString();
+}
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="User" asp-action="ListOfAllProjects">Projects</a>
+                <a class="navbar-brand text-muted" asp-area="" asp-controller="User" asp-action="ListOfAllProjects">Projects</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -38,13 +41,32 @@
                                                     Add New Project
                                                 </a>
                                             </li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li>
-                                                <a class="dropdown-item" style="width:auto"
-                                               asp-controller="Admin" asp-action="AddNewTaskToProject" asp-route-id="@ViewBag.currentProjectId">
-                                                    Add New Task
-                                                </a>
-                                            </li>
+                                        @switch (pageName)
+                                        {
+                                            case "Sprints":
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li>
+                                                    <a class="dropdown-item" style="width:auto"
+                                                       asp-controller="Admin" asp-action="AddNewSprint" asp-route-id="@ViewBag.currentProjectId">
+                                                        Add New Sprint
+                                                    </a>
+                                                </li>
+                                                break;
+
+                                            case "ListOfAllTasksFromProject":
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li>
+                                                    <a class="dropdown-item" style="width:auto"
+                                                       asp-controller="Admin" asp-action="AddNewTaskToProject" asp-route-id="@ViewBag.currentSprintId">
+                                                        Add New Task
+                                                    </a>
+                                                </li>
+                                                break;
+
+                                            default:
+                                                break;
+                                        }
+                                        
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
                                                 <a class="dropdown-item" style="width:auto"
@@ -64,7 +86,7 @@
                                 </li>
                         }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-muted" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <form asp-controller="User" asp-action="ListOfAllProjects" method="get" class="px-3">
                             <div class="row">

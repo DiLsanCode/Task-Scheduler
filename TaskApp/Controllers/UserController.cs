@@ -33,10 +33,21 @@ namespace TaskApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ListOfAllTasksFromProject(int projectId)
+        public async Task<IActionResult> Sprints(int projectId)
         {
             ViewBag.currentProjectId = projectId;
-            var tasks = await _userService.GetAllTasksFromProject(projectId);
+            var sprints = await _userService.GetAllSprints(projectId);
+            return View(sprints);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ListOfAllTasksFromProject(int sprintId, int userId)
+        {
+            ViewBag.currentSprintId = sprintId;
+            ViewBag.totalScore = await _userService.finalScore(sprintId, userId);
+            ViewBag.doneScore = await _userService.doneScore(sprintId, userId);
+            ViewBag.percentage = await _userService.GetPercentageOfDoneWork(sprintId, userId);
+            var tasks = await _userService.GetAllTasksFromProject(sprintId, userId);
             return View(tasks);
         }
 

@@ -13,7 +13,8 @@ namespace TaskApp.Business.Interfaces
     public interface IUserService
     {
         Task<IEnumerable<dtoProject>> GetAllProjects();
-        Task<IEnumerable<dtoTask>> GetAllTasksFromProject(int projectId);
+        Task<IEnumerable<dtoTask>> GetAllTasksFromProject(int sprintId, int userId);
+        Task<IEnumerable<dtoSprint>> GetAllSprints(int projectId);
         Task<dtoTask> GetTaskById(int id);
         Task UpdateStatus(int id, string status, int currentUser);
         Task<IEnumerable<dtoProject>> GetAllSearchedProjects(string name);
@@ -21,5 +22,8 @@ namespace TaskApp.Business.Interfaces
         dtoStatus GetStatusByName(string id);
         Task<Comment> AddComment(string text, int userId, int taskId);
         Task<IEnumerable<dtoComment>> GetComments(int id);
+        Task<int> GetPercentageOfDoneWork(int sprintId, int userId);
+        Task<double> finalScore(int sprintId, int userId);
+        Task<double> doneScore(int sprintId, int userId);
     }
 }

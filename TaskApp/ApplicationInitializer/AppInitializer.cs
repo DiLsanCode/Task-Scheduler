@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Text;
+using TaskApp.Business.Constants;
+using TaskApp.Data.Models;
 using TaskList.Business.Constants;
 using TaskList.Data.Data;
 using TaskList.Data.Models;
@@ -32,6 +35,7 @@ namespace VotingApp.ApplicationInitializer
             await SeedRolesAsync();
             await SeedUsersAsync();
             await SeedProjectsAsync();
+            await SeedSprints();
             await SeedTasksAsync();
         }
 
@@ -84,6 +88,33 @@ namespace VotingApp.ApplicationInitializer
             await _dbContext.SaveChangesAsync();
         }
 
+        private async Task SeedSprints()
+        {
+            if (await _dbContext.Sprints.AnyAsync())
+            {
+                return;
+            }
+
+            foreach(var project in _dbContext.Projects)
+            {
+                for (int i = 1; i < 10; i++)
+                {
+                    await _dbContext.Sprints.AddAsync(new Sprint()
+                    {
+                        Name = $"{project.Name} Sprint {i}",
+                        ProjectId = project.Id,
+                    });
+                }
+
+                await _dbContext.Sprints.AddAsync(new Sprint()
+                {
+                    Name = $"{project.Name} Buffer Sprint",
+                    ProjectId = project.Id,
+                });
+            }
+            await _dbContext.SaveChangesAsync();
+        }
+
         private async Task SeedTasksAsync()
         {
             Random random = new Random();
@@ -105,21 +136,26 @@ namespace VotingApp.ApplicationInitializer
                 return;
             }
 
-            foreach (Project project in _dbContext.Projects)
+            foreach (var sprint in _dbContext.Sprints)
             {
-                for (int i = 0; i < 5; i++)
+                if (!sprint.Name.Contains("Buffer"))
                 {
-                    await _dbContext.Tasks.AddAsync(new Assignment()
+                    for (int i = 0; i < 5; i++)
                     {
-                        Name = $"{taskNames[i]}",
-                        UserId = random.Next(3, 8),
-                        ProjectId = random.Next(1, 10),
-                        Description = $"{taskDescriptions[i]}",
-                        Status = Status.ToDo.ToString(),
-                        DateStart = DateTime.Now,
-                        DateEnd = DateTime.Now.AddDays(14),
-                    });
+                        await _dbContext.Tasks.AddAsync(new Assignment()
+                        {
+                            Name = $"{taskNames[i]}",
+                            UserId = random.Next(3, 8),
+                            SprintId = sprint.Id,
+                            Description = $"{taskDescriptions[i]}",
+                            Score = FibonacciNumbers.GetList()[random.Next(0, 10)],
+                            Status = Status.ToDo.ToString(),
+                            DateStart = DateTime.Now,
+                            DateEnd = DateTime.Now.AddDays(14),
+                        });
+                    }
                 }
+                
             }
             await _dbContext.SaveChangesAsync();
         }

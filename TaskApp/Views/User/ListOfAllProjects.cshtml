@@ -30,16 +30,16 @@
             @foreach (var project in listOfProjects)
             {
                 <div class="card col p-0 m-1 mb-3" id="list">
-                    <div class="card-header text-center" style="background-color:white;">
+                    <div class="card-header text-center" id="header">
                         @project.Name
                     </div>
                     <div class="card-body p-0">
                         <img src="\image\project_stock.jpg" class="w-100 h-100"></img>
                     </div>
                     <div class="card-footer text-center p-0">
-                        <a class="btn btn-primary rounded-0 w-100"
-                   asp-controller="User" asp-action="ListOfAllTasksFromProject" asp-route-projectId="@project.Id">
-                            Go To Tasks!
+                        <a class="btn btn-outline-primary rounded-0 w-100" id="btn_prim"
+                           asp-controller="User" asp-action="Sprints" asp-route-projectId="@project.Id">
+                            Sprints!
                         </a>
                         @if (User.IsInRole(Roles.Admin))
                         {
