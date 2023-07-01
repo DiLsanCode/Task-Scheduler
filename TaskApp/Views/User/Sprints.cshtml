@@ -1,0 +1,69 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using TaskApp.Business.dto;
+@using TaskList.Business.Constants;
+@using TaskList.Data.Models;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@model IEnumerable<dtoSprint>
+@{
+    User user = await UserManager.GetUserAsync(User);
+    List<dtoSprint> listOfSprints = new List<dtoSprint>();
+    foreach (var sprint in Model)
+    {
+        listOfSprints.Add(sprint);
+    }
+}
+<div id="task-box">
+    @if (Model.Any())
+    {
+        if (User.IsInRole(Roles.Admin))
+        {
+            <div class="text-center p-1">
+                @foreach (var sprint in listOfSprints)
+                {
+                    <div class="row">
+                        <div class="col p-0">
+                            <a class="btn btn-outline-primary rounded-0 w-100 h-100"
+                               asp-controller="User" asp-action="ListOfAllTasksFromProject" asp-route-sprintid="@sprint.Id" asp-route-userid="@user.Id">
+                                @sprint.Name
+                            </a>
+                        </div>
+                        <div class="col col-lg-2 p-0 ">
+                            <a class="btn btn-outline-warning rounded-0 w-50 h-100 float-start"
+                               asp-controller="Admin" asp-action="EditSprint" asp-route-id="@sprint.Id">
+                                Edit!
+                            </a>
+                            <form class="w-50 h-100 p-0 float-end" method="post" asp-action="DeleteSprint" asp-controller="Admin" asp-route-id="@sprint.Id" onclick="return confirm('Are you sure you want to delete this?')">
+                                <button type="submit" class="btn btn-outline-danger rounded-0 w-100 h-100">Delete!</button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else if (User.IsInRole(Roles.User))
+        {
+            <div class="text-center p-1">
+                @foreach (var sprint in listOfSprints)
+                {
+                    <div class="row">
+                        <div class="col p-0">
+                            <a class="btn btn-outline-primary rounded-0 w-100 h-100"
+                               asp-controller="User" asp-action="ListOfAllTasksFromProject" asp-route-sprintid="@sprint.Id" asp-route-userid="@user.Id">
+                                @sprint.Name
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-header">
+                No Sprints Yet
+            </div>
+        </div>
+    }
+</div>

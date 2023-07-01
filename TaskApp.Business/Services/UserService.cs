@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using TaskApp.Business.dto;
@@ -11,6 +12,7 @@ using TaskApp.Data.Models;
 using TaskList.Business.Constants;
 using TaskList.Data.Data;
 using TaskList.Data.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TaskApp.Business.Services
 {
@@ -34,29 +36,74 @@ namespace TaskApp.Business.Services
             return projects;
         }
 
-        public async Task<IEnumerable<dtoTask>> GetAllTasksFromProject(int projectId)
+        public async Task<IEnumerable<dtoSprint>> GetAllSprints(int projectId)
         {
-            var tasks = await _dbContext.Tasks
+            var sprints = await _dbContext.Sprints
+                .Select(x => new dtoSprint
+                { 
+                    Id = x.Id,
+                    Name = x.Name,
+                    ProjectId = x.ProjectId,
+                }).Where(c => c.ProjectId == projectId)
+                .ToListAsync();
+            return sprints;
+        }
+
+        public async Task<IEnumerable<dtoTask>> GetAllTasksFromProject(int sprintId, int userId)
+        {
+            if(userId == 1)
+            {
+                var tasks = await _dbContext.Tasks
                 .Select(p => new dtoTask
                 {
                     Id = p.Id,
                     Name = p.Name,
-                    ProjectId = p.ProjectId,
+                    SprintId = p.SprintId,
                     Description = p.Description,
+                    Score = p.Score,
                     UserId = p.UserId,
                     Status = p.Status,
                     DateStart = p.DateStart,
                     DateEnd = p.DateEnd,
                     userName = _dbContext.Users
-                    .Select(x => new dtoUser 
-                    { 
-                        Id = x.Id, 
-                        Name = x.FirstName + " " + x.LastName 
+                    .Select(x => new dtoUser
+                    {
+                        Id = x.Id,
+                        Name = x.FirstName + " " + x.LastName
                     }).FirstOrDefault(x => x.Id == p.UserId)
-                }).Where(p => p.ProjectId == projectId)
+                }).Where(c => c.SprintId == sprintId)
+                .OrderBy(x => x.Name)
                 .ToListAsync();
 
-            return tasks;
+                return tasks;
+            }
+            else
+            {
+                var tasks = await _dbContext.Tasks
+                .Select(p => new dtoTask
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    SprintId = p.SprintId,
+                    Description = p.Description,
+                    Score = p.Score,
+                    UserId = p.UserId,
+                    Status = p.Status,
+                    DateStart = p.DateStart,
+                    DateEnd = p.DateEnd,
+                    userName = _dbContext.Users
+                    .Select(x => new dtoUser
+                    {
+                        Id = x.Id,
+                        Name = x.FirstName + " " + x.LastName
+                    }).FirstOrDefault(x => x.Id == p.UserId)
+                }).Where(c => c.SprintId == sprintId && c.UserId == userId)
+                .OrderBy(x => x.Name)
+                .ToListAsync();
+
+                return tasks;
+            }
+            
         }
 
         public async Task<dtoTask> GetTaskById(int id)
@@ -68,8 +115,9 @@ namespace TaskApp.Business.Services
                     Name = x.Name,
                     Description = x.Description,
                     Status = x.Status,
+                    Score = x.Score,
                     UserId = x.UserId,
-                    ProjectId = x.ProjectId,
+                    SprintId = x.SprintId,
                     DateStart = x.DateStart,
                     DateEnd = x.DateEnd,
                 }).FirstOrDefaultAsync(x => x.Id == id);
@@ -184,6 +232,81 @@ namespace TaskApp.Business.Services
                 .ToListAsync();
 
             return comments;
+        }
+
+        public async Task<int> GetPercentageOfDoneWork(int sprintId, int userId)
+        {
+            var combinedScoreList = await finalScore(sprintId, userId);
+            var combinedScoreOfDoneList = await doneScore(sprintId, userId);
+            
+            var percentage = (int)Math.Round((double)(100 * combinedScoreOfDoneList) / combinedScoreList);
+
+            return percentage;
+        }
+
+        public async Task<double> doneScore(int sprintId, int userId)
+        {
+            if(userId == 1)
+            {
+                var combinedScoreOfDoneList = await _dbContext.Tasks
+                .Where(x => x.SprintId == sprintId && x.Status.Contains("Done"))
+                .Select(p => double.Parse(p.Score))
+                .ToListAsync();
+
+                double combineDoneScore = 0;
+                foreach (var scoreOfDoneTask in combinedScoreOfDoneList)
+                {
+                    combineDoneScore += scoreOfDoneTask;
+                }
+                return combineDoneScore;
+            }
+            else
+            {
+                var combinedScoreOfDoneList = await _dbContext.Tasks
+                .Where(x => x.SprintId == sprintId && x.UserId == userId && x.Status.Contains("Done"))
+                .Select(p => double.Parse(p.Score))
+                .ToListAsync();
+
+                double combineDoneScore = 0;
+                foreach (var scoreOfDoneTask in combinedScoreOfDoneList)
+                {
+                    combineDoneScore += scoreOfDoneTask;
+                }
+                return combineDoneScore;
+            }
+        }
+
+        public async Task<double> finalScore(int sprintId, int userId)
+        {
+            if(userId == 1)
+            {
+                var combinedScoreList = await _dbContext.Tasks
+                .Where(x => x.SprintId == sprintId)
+                .Select(p => double.Parse(p.Score))
+                .ToListAsync();
+
+                double combinedScore = 0;
+                foreach (var score in combinedScoreList)
+                {
+                    combinedScore += score;
+                }
+                return combinedScore;
+            }
+            else
+            {
+                var combinedScoreList = await _dbContext.Tasks
+                                .Where(x => x.SprintId == sprintId && x.UserId == userId)
+                                .Select(p => double.Parse(p.Score))
+                                .ToListAsync();
+
+                double combinedScore = 0;
+                foreach (var score in combinedScoreList)
+                {
+                    combinedScore += score;
+                }
+                return combinedScore;
+            }
+            
         }
     }
 }

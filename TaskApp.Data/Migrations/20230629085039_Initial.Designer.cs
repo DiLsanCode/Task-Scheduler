@@ -12,7 +12,7 @@ using TaskList.Data.Data;
 namespace TaskApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230601151741_Initial")]
+    [Migration("20230629085039_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -155,6 +155,28 @@ namespace TaskApp.Data.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("TaskApp.Data.Models.Sprint", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("Sprints");
+                });
+
             modelBuilder.Entity("TaskList.Data.Models.Assignment", b =>
                 {
                     b.Property<int>("Id")
@@ -177,7 +199,11 @@ namespace TaskApp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProjectId")
+                    b.Property<string>("Score")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SprintId")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
@@ -189,7 +215,7 @@ namespace TaskApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("SprintId");
 
                     b.HasIndex("UserId");
 
@@ -392,12 +418,23 @@ namespace TaskApp.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TaskList.Data.Models.Assignment", b =>
+            modelBuilder.Entity("TaskApp.Data.Models.Sprint", b =>
                 {
                     b.HasOne("TaskList.Data.Models.Project", "Project")
-                        .WithMany("Tasks")
+                        .WithMany("Sprints")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("TaskList.Data.Models.Assignment", b =>
+                {
+                    b.HasOne("TaskApp.Data.Models.Sprint", "Sprint")
+                        .WithMany("Tasks")
+                        .HasForeignKey("SprintId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("TaskList.Data.Models.User", "User")
@@ -406,9 +443,14 @@ namespace TaskApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Project");
+                    b.Navigation("Sprint");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TaskApp.Data.Models.Sprint", b =>
+                {
+                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("TaskList.Data.Models.Assignment", b =>
@@ -418,7 +460,7 @@ namespace TaskApp.Data.Migrations
 
             modelBuilder.Entity("TaskList.Data.Models.Project", b =>
                 {
-                    b.Navigation("Tasks");
+                    b.Navigation("Sprints");
                 });
 #pragma warning restore 612, 618
         }

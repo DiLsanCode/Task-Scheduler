@@ -180,12 +180,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWRkTmV3UHJvamVjdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Dilsan/Documents/Task-Scheduler/TaskApp/Views/Admin/AddNewSprint.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWRkTmV3U3ByaW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Dilsan/Documents/Task-Scheduler/TaskApp/Views/Admin/AddNewTaskToProject.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWRkTmV3VGFza1RvUHJvamVjdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Dilsan/Documents/Task-Scheduler/TaskApp/Views/Admin/EditProject.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdFByb2plY3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Dilsan/Documents/Task-Scheduler/TaskApp/Views/Admin/EditSprint.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdFNwcmludC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Dilsan/Documents/Task-Scheduler/TaskApp/Views/Admin/EditTask.cshtml]
@@ -222,6 +230,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Dilsan/Documents/Task-Scheduler/TaskApp/Views/User/ListOfAllTasksFromProject.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxMaXN0T2ZBbGxUYXNrc0Zyb21Qcm9qZWN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Dilsan/Documents/Task-Scheduler/TaskApp/Views/User/Sprints.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxTcHJpbnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Dilsan/Documents/Task-Scheduler/TaskApp/Views/User/TaskInformation.cshtml]

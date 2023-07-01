@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskApp.Business.Constants;
 using TaskApp.Business.dto;
 using TaskApp.Business.Interfaces;
 using TaskApp.Data.Models;
@@ -28,7 +29,7 @@ namespace TaskApp.Business.Services
             var existringProject = await _dbContext.Projects
                 .FirstOrDefaultAsync(x => x.Name == project.Name);
 
-            if(existringProject == null)
+            if (existringProject == null)
             {
                 var newProject = await _dbContext.AddAsync(new Project()
                 {
@@ -43,9 +44,9 @@ namespace TaskApp.Business.Services
 
         public async Task<Assignment> AddNewTask(dtoTask task)
         {
-            if (task.ProjectId.Equals(0))
+            if (task.SprintId.Equals(0))
             {
-                throw new Exception("Project was not selected");
+                throw new Exception("Sprint was not selected! Please select a sprint from the desired project!");
             }
             var newTask = await _dbContext.AddAsync(new Assignment()
             {
@@ -53,7 +54,8 @@ namespace TaskApp.Business.Services
                 Description = task.Description,
                 Status = task.Status,
                 UserId = task.UserId,
-                ProjectId = task.ProjectId,
+                Score = task.Score,
+                SprintId = task.SprintId,
                 DateStart = task.DateStart,
                 DateEnd = task.DateEnd,
             });
@@ -78,7 +80,24 @@ namespace TaskApp.Business.Services
             return project;
         }
 
-        public async Task<dtoProject> GetProjectByName(string name)
+        public async Task<dtoSprint> GetSprintById(int id)
+        {
+            var sprint = await _dbContext.Sprints
+                .Select(x => new dtoSprint
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    ProjectId = x.ProjectId,
+                }).FirstOrDefaultAsync(x => x.Id == id);
+
+            if (sprint == null)
+            {
+                throw new Exception("Sprint Not Found!");
+            }
+            return sprint;
+        }
+
+        public async Task<bool> IsProjectNameTaken(string name)
         {
             var project = await _dbContext.Projects
                 .Select(x => new dtoProject
@@ -87,22 +106,75 @@ namespace TaskApp.Business.Services
                     Name = x.Name,
                 }).FirstOrDefaultAsync(x => x.Name == name);
 
-            return project;
+            if (project == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public async Task<bool> IsSprintNameTaken(string name)
+        {
+            var sprint = await _dbContext.Sprints
+                .Select(x => new dtoSprint
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                }).FirstOrDefaultAsync(x => x.Name == name);
+
+            if(sprint == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public async Task<bool> IsTaskNameTaken(string name)
+        {
+            var task = await _dbContext.Tasks
+                .Select(x => new dtoTask
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                }).FirstOrDefaultAsync(x => x.Name == name);
+
+            if (task == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         public async Task DeleteProject(int id)
         {
-            var proojectToRemove = await _dbContext.Projects
+            var projectToRemove = await _dbContext.Projects
                 .FirstOrDefaultAsync(x => x.Id == id);
+            if (projectToRemove == null)
+            {
+                throw new Exception("Project Not Found");
+            }
 
-            var tasks = await _dbContext.Tasks
-                .Include(c => c.Comments)
-                .Where(c => c.ProjectId == id)
+            var sprints = await _dbContext.Sprints
+                .Include(x => x.Tasks)
+                .Where(x => x.ProjectId == id)
                 .ToListAsync();
 
-            if (proojectToRemove == null)
+            List<Assignment> tasks = new List<Assignment>();
+            foreach (var sprint in sprints)
             {
-                throw new Exception("Participant Not Found");
+                tasks = await _dbContext.Tasks
+                .Include(c => c.Comments)
+                .Where(c => c.SprintId == sprint.Id)
+                .ToListAsync();
             }
 
             foreach (var task in tasks)
@@ -111,7 +183,13 @@ namespace TaskApp.Business.Services
             }
             await _dbContext.SaveChangesAsync();
 
-            _dbContext.Projects.Remove(proojectToRemove);
+            foreach (var sprint in sprints)
+            {
+                _dbContext.Tasks.RemoveRange(sprint.Tasks);
+            }
+            await _dbContext.SaveChangesAsync();
+
+            _dbContext.Projects.Remove(projectToRemove);
             await _dbContext.SaveChangesAsync();
         }
 
@@ -124,7 +202,7 @@ namespace TaskApp.Business.Services
 
             if (projectToEdit != null)
             {
-                if(projectWithSimilarName == null)
+                if (projectWithSimilarName == null)
                 {
                     projectToEdit.Name = project.Name;
 
@@ -135,7 +213,6 @@ namespace TaskApp.Business.Services
                 {
                     throw new Exception("There is project with that name!");
                 }
-                
             }
             else
             {
@@ -154,6 +231,20 @@ namespace TaskApp.Business.Services
                 .ToListAsync();
 
             return users;
+        }
+
+        public async Task<IEnumerable<dtoSprint>> GetListOfSprints()
+        {
+            var sprints = await _dbContext.Sprints
+                .Select(x => new dtoSprint
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    ProjectId = x.ProjectId,
+                })
+                .ToListAsync();
+
+            return sprints;
         }
 
         public async Task<IEnumerable<dtoProject>> GetListOfProjects()
@@ -208,11 +299,12 @@ namespace TaskApp.Business.Services
             if (taskToEdit != null)
             {
                 taskToEdit.Name = task.Name;
-                taskToEdit.UserId= task.UserId;
-                taskToEdit.ProjectId= task.ProjectId;
+                taskToEdit.UserId = task.UserId;
+                taskToEdit.SprintId = task.SprintId;
                 taskToEdit.Status = task.Status;
+                taskToEdit.Score = task.Score;
                 taskToEdit.Description = task.Description;
-                taskToEdit.DateStart= task.DateStart;
+                taskToEdit.DateStart = task.DateStart;
                 taskToEdit.DateEnd = task.DateEnd;
 
                 _dbContext.Tasks.Update(taskToEdit);
@@ -232,8 +324,9 @@ namespace TaskApp.Business.Services
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
-                    ProjectId = x.ProjectId,
+                    SprintId = x.SprintId,
                     UserId = x.UserId,
+                    Score = x.Score,
                     Status = x.Status,
                     DateStart = x.DateStart,
                     DateEnd = x.DateEnd,
@@ -253,9 +346,10 @@ namespace TaskApp.Business.Services
                 {
                     Id = p.Id,
                     Name = p.Name,
-                    ProjectId = p.ProjectId,
+                    SprintId = p.SprintId,
                     Description = p.Description,
                     UserId = p.UserId,
+                    Score = p.Score,
                     Status = p.Status,
                     userName = _dbContext.Users
                     .Select(x => new dtoUser
@@ -267,6 +361,84 @@ namespace TaskApp.Business.Services
                 .ToListAsync();
 
             return tasks;
+        }
+
+        public async Task<Sprint> AddNewSprint(dtoSprint sprint)
+        {
+            var existringSprint = await _dbContext.Sprints
+                .FirstOrDefaultAsync(x => x.Name == sprint.Name);
+
+            if (existringSprint == null)
+            {
+                var newSprint = await _dbContext.AddAsync(new Sprint()
+                {
+                    Name = sprint.Name,
+                    ProjectId = sprint.ProjectId,
+
+                });
+
+                await _dbContext.SaveChangesAsync();
+                return newSprint.Entity;
+            }
+            throw new Exception("Sprint with that name already exists!");
+        }
+
+        public async Task EditSprint(int id, dtoSprint sprint)
+        {
+            var sprintToEdit = await _dbContext.Sprints
+               .FirstOrDefaultAsync(x => x.Id == id);
+            var sprintWithSimilarName = await _dbContext.Sprints
+                .FirstOrDefaultAsync(x => x.Name == sprint.Name);
+
+            if (sprintToEdit != null)
+            {
+                if (sprintWithSimilarName == null)
+                {
+                    sprintToEdit.Name = sprint.Name;
+                    sprintToEdit.ProjectId = sprint.ProjectId;
+
+                    _dbContext.Sprints.Update(sprintToEdit);
+                    await _dbContext.SaveChangesAsync();
+                }
+                else
+                {
+                    throw new Exception("There is a sprint with that name!");
+                }
+
+            }
+            else
+            {
+                throw new Exception("Sprint Not Found");
+            }
+        }
+
+        public async Task DeleteSprint(int id)
+        {
+            var sprintToRemove = await _dbContext.Sprints
+                .FirstOrDefaultAsync(x => x.Id == id);
+            if (sprintToRemove == null)
+            {
+                throw new Exception("Sprint Not Found");
+            }
+
+            var tasks = await _dbContext.Tasks
+            .Include(c => c.Comments)
+            .Where(c => c.SprintId == id)
+            .ToListAsync();
+
+            foreach (var task in tasks)
+            {
+                _dbContext.Comments.RemoveRange(task.Comments);
+            }
+            await _dbContext.SaveChangesAsync();
+
+            _dbContext.Sprints.Remove(sprintToRemove);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public List<string> GetFibunacciList()
+        {
+            return FibonacciNumbers.GetList();
         }
     }
 }

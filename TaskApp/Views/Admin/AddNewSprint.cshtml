@@ -1,21 +1,26 @@
-﻿@using Microsoft.AspNetCore.Mvc.ModelBinding;
-@using TaskApp.Business.dto;
-@model dtoProject
+﻿@using TaskApp.Business.dto
+@model dtoSprint
 @{
-    ViewData["Title"] = "Add New Project";
+    ViewData["Title"] = "Add Sprint";
 }
 
 <div id="task-box">
+    <h1 style="display:flex; justify-content: center; align-items: center" class="text-muted">@ViewData["Title"]</h1>
+
     <div class="row" style="display:flex; justify-content: center; align-items: center">
         <div class="col-md-4">
             <form method="post">
-                <h2 class="text-muted">Add New Project.</h2>
                 <hr class="text-muted" />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-floating mb-2">
                     <input asp-for="Name" class="form-control" autocomplete="off" aria-required="true" placeholder="name" />
                     <label asp-for="Name"></label>
                     <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-2 visually-hidden">
+                    <input asp-for="ProjectId" class="form-control" autocomplete="off" aria-required="true" placeholder="name" value="@ViewBag.currentProject.Id" />
+                    <label asp-for="ProjectId"></label>
+                    <span asp-validation-for="ProjectId" class="text-danger"></span>
                 </div>
                 <div class="errors">
                     @if (ViewBag.errors != null)
@@ -27,11 +32,12 @@
                     }
                 </div>
                 <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary mb-2">Add</button>
-                <a class="w-100 btn btn-outline-dark mb-2 text-muted" asp-area="" asp-controller="User" asp-action="ListOfAllProjects">Cancel</a>
+                <a class="w-100 btn btn-outline-dark mb-2 text-muted" asp-area="" asp-controller="User" asp-action="Sprints" asp-route-projectId="@ViewBag.currentProject.Id">Cancel</a>
             </form>
         </div>
     </div>
 </div>
+
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+        <partial name="_ValidationScriptsPartial" />
 }
