@@ -30,32 +30,33 @@
             @foreach (var project in listOfProjects)
             {
                 <div class="card col p-0 m-1 mb-3" id="list">
-                    <div class="card-header text-center">
+                    <div class="card-header text-center" id="header">
                         @project.Name
                     </div>
                     <div class="card-body p-0">
                         <img src="\image\project_stock.jpg" class="w-100 h-100"></img>
                     </div>
                     <div class="card-footer text-center p-0">
-                        <a class="btn btn-primary rounded-0 w-100"
-                   asp-controller="User" asp-action="ListOfAllTasksFromProject" asp-route-projectId="@project.Id">
-                            Go To Tasks!
+                        <a class="btn btn-outline-primary rounded-0 w-100" id="btn_prim"
+                           asp-controller="User" asp-action="Sprints" asp-route-projectId="@project.Id">
+                            Sprints!
                         </a>
                         @if (User.IsInRole(Roles.Admin))
                         {
                             <div class="row w-100 m-0">
-                                <a class="btn col btn-warning rounded-0 w-50"
+                                <a class="btn col btn-outline-warning rounded-0 w-50"
                        asp-controller="Admin" asp-action="EditProject" asp-route-id="@project.Id">
                                     Edit!
                                 </a>
                                 <form class="col w-50 p-0" method="post" asp-action="DeleteProject" asp-controller="Admin" asp-route-id="@project.Id" onclick="return confirm('Are you sure you want to delete this?')">
-                                    <button type="submit" class="btn btn-danger rounded-0 w-100">Delete!</button>
+                                    <button type="submit" class="btn btn-outline-danger rounded-0 w-100">Delete!</button>
                                 </form>
                             </div>
                                
                         }
                     </div>
                 </div>
+                
                 if (counter == 4)
                 {
                     <div class="w-100"></div>
@@ -63,6 +64,18 @@
                 }
                 counter++;
             }
+            @for(int i=1; i<=3; i++)
+                {
+                    <div class="card col p-0 m-1 mb-3" id="list" style="visibility: hidden;">
+
+                    </div>
+                if (counter == 4)
+                {
+                    <div class="w-100"></div>
+                    counter = 0;
+                }
+                counter++;
+                }
         </div>
     </div>
 

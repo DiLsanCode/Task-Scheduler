@@ -1,15 +1,15 @@
 ﻿@using TaskApp.Business.dto
 @using TaskList.Business.Constants;
-@model dtoProject
+@model dtoSprint
 @{
-    ViewData["Title"] = "Edit Project";
+    ViewData["Title"] = "Edit Sprint";
 }
 
 @if (User.IsInRole(Roles.Admin))
 {
-    <h1 style="display:flex; justify-content: center; align-items: center" class="text-muted">@ViewData["Title"]</h1>
-
     <div id="task-box">
+        <h1 style="display:flex; justify-content: center; align-items: center" class="text-muted">@ViewData["Title"]</h1>
+
         <div class="row" style="display:flex; justify-content: center; align-items: center">
             <div class="col-md-4">
                 <form method="post">
@@ -19,6 +19,15 @@
                         <input asp-for="Name" class="form-control" autocomplete="off" aria-required="true" placeholder="name" value="@Model.Name" />
                         <label asp-for="Name"></label>
                         <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <select class="form-control" asp-for="ProjectId" asp-items="@(new SelectList(ViewBag.projectList,"Id","Name"))">
+                            <option selected="selected">
+                                @Model.ProjectId
+                            </option>
+                        </select>
+                        <label asp-for="ProjectId"></label>
+                        <span asp-validation-for="ProjectId" class="text-danger"></span>
                     </div>
                     <div class="errors">
                         @if (ViewBag.errors != null)
@@ -30,7 +39,7 @@
                         }
                     </div>
                     <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary mb-2">Edit</button>
-                    <a class="w-100 btn btn-outline-dark mb-2 text-muted" asp-area="" asp-controller="User" asp-action="ListOfAllProjects">Cancel</a>
+                    <a class="w-100 btn btn-outline-dark mb-2 text-muted" asp-area="" asp-controller="User" asp-action="Sprints" asp-route-projectId="@Model.ProjectId">Cancel</a>
                 </form>
             </div>
         </div>

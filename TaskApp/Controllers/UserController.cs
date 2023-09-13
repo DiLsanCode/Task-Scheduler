@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Operations;
 using TaskApp.Business.dto;
 using TaskApp.Business.Interfaces;
 using TaskApp.Business.Services;
@@ -32,10 +33,21 @@ namespace TaskApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ListOfAllTasksFromProject(int projectId)
+        public async Task<IActionResult> Sprints(int projectId)
         {
             ViewBag.currentProjectId = projectId;
-            var tasks = await _userService.GetAllTasksFromProject(projectId);
+            var sprints = await _userService.GetAllSprints(projectId);
+            return View(sprints);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ListOfAllTasksFromProject(int sprintId, int userId)
+        {
+            ViewBag.currentSprintId = sprintId;
+            ViewBag.totalScore = await _userService.finalScore(sprintId, userId);
+            ViewBag.doneScore = await _userService.doneScore(sprintId, userId);
+            ViewBag.percentage = await _userService.GetPercentageOfDoneWork(sprintId, userId);
+            var tasks = await _userService.GetAllTasksFromProject(sprintId, userId);
             return View(tasks);
         }
 
@@ -43,7 +55,8 @@ namespace TaskApp.Controllers
         public async Task<IActionResult> TaskInformation(int id)
         {
             var task = await _userService.GetTaskById(id);
-            ViewBag.userList = await _userService.GetUserById(task.UserId);
+            ViewBag.user = await _userService.GetUserById(task.UserId);
+            ViewBag.comments = await _userService.GetComments(task.Id);
             return View(task);
         }
 
@@ -52,6 +65,16 @@ namespace TaskApp.Controllers
         {
             await _userService.UpdateStatus(id, status, currentUser);
             return RedirectToAction("TaskInformation", "User", new { id = id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddComment(string text, int userId, int taskId)
+        {
+            if(text != null)
+            {
+                await _userService.AddComment(text, userId, taskId);
+            }
+            return RedirectToAction("TaskInformation", "User", new { id = taskId });
         }
     }
 }

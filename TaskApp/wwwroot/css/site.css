@@ -17,6 +17,68 @@ html {
   min-height: 100%;
 }
 
+header {
+    background-color: rgba(0,0,0, 0.45);
+}
+
 body {
-  margin-bottom: 60px;
+    background-image: url('/image/9868004_4277097.jpg');
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    margin-bottom: 60px;
+    font-family: "Calibri", sans-serif;
+}
+
+#list {
+    color: darkgrey;
+    background-color: rgba(24, 49, 65, 0.3);
+    box-shadow: 0px 0px 20px black
+}
+
+#task-box {
+    color:black;
+    border-radius:25px;
+    padding: 20px;
+    margin-left: -20px;
+    margin-right: -20px;
+    background-color: rgba(0,0,0, 0.45)
+}
+
+.btn-outline-primary {
+    border-color: rgb(218, 155, 71);
+    background-color: rgba(218, 155, 71, 0);
+    color: rgb(218, 155, 71);
+}
+
+.btn-outline-primary:hover {
+    border-color: rgb(218, 155, 71);
+    background-color: rgba(218, 155, 71, 1);
+    color: black;
+}
+.btn-check:active + .btn-outline-primary, .btn-check:checked + .btn-outline-primary, .btn-outline-primary.active, .btn-outline-primary.dropdown-toggle.show, .btn-outline-primary:active
+{
+    border-color: rgb(218, 155, 71);
+    background-color: rgba(218, 155, 71, 1);
+    color: black;
+}
+
+.btn-danger + .btn-outline-danger:hover + .btn-danger:hover {
+    color: black;
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+#outer-progression-bar {
+    border-radius: 25px;
+    background-color: rgba(255,255,255, 0.4)
+}
+
+#inner-progression-bar {
+    text-align:center;
+    border-radius: 25px;
+    background-color: rgba(107,142,35, 1)
 }

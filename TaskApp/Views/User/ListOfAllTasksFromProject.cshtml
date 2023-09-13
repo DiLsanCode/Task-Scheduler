@@ -18,98 +18,101 @@
     }
 
     User user = await UserManager.GetUserAsync(User);
-    var sortedList = listOfTasks.OrderBy(x => x.Name).ToList();
-    var userTasks = listOfTasks.Where(x => x.UserId == user.Id).OrderBy(x => x.Name).ToList();
-
+    int counter = 1;
+    List<int> ints = new List<int>();
 }
 
-@if (Model.Any())
-{
-    if (User.IsInRole(Roles.Admin))
+<div id="task-box">
+    @if (Model.Any())
     {
-        <div class="text-center p-1">
-            @foreach (var task in listOfTasks)
-            {
-                <div class="row">
-                    <div class="col p-0">
-                        <a class="btn btn-primary rounded-0 w-100 h-100"
-               asp-controller="User" asp-action="TaskInformation" asp-route-id="@task.Id">
-                            @task.Name
-                        </a>
-                    </div>
-                    <div class="col col-lg-3 p-0">
-                        <p class="bg-primary m-0 w-100 h-100" id="taskListDate">
-                            @{
-                                var FiveDaysDue = task.DateEnd.AddDays(-5);
-                                var compareDates = DateTime.Compare(FiveDaysDue, DateTime.Today);
-                                if (compareDates <= 0 && task.Status != Status.Done.ToString())
-                                {
-                                    <script>
-                                        $(document).ready(function () {
-                                            $("#taskListDate").toggleClass("bg-primary");
-                                            $("#taskListDate").toggleClass("bg-danger");
-                                        });</script>
+        <div id="outer-progression-bar">
+            <div id="inner-progression-bar" style="width:@(ViewBag.percentage+"%")">
+                <p>@(ViewBag.doneScore + "/" + ViewBag.totalScore)</p>
+            </div>
+        </div>
+        if (User.IsInRole(Roles.Admin))
+        {
+            <div class="text-center p-1">
+                @foreach (var task in listOfTasks)
+                {
+                    <div class="row">
+                        <div class="col p-0">
+                            <a class="btn btn-outline-primary rounded-0 w-100 h-100"
+                               asp-controller="User" asp-action="TaskInformation" asp-route-id="@task.Id">
+                                @task.Name
+                            </a>
+                        </div>
+                        <div class="col col-lg-3 p-0">
+                            <p class="m-0 w-100 h-100" id="@("taskListDate" + @counter)" style="background-color: rgba(218, 155, 71, 1); color:black">
+                                @{
+                                    var FiveDaysDue = task.DateEnd.AddDays(-5);
+                                    var compareDates = DateTime.Compare(FiveDaysDue, DateTime.Today);
+                                    if (compareDates <= 0 && task.Status != Status.Done.ToString())
+                                    {
+                                        ints.Add(counter);
+                                    }
                                 }
-                            }
-                            @task.userName.Name |
-                            @task.DateEnd.ToString("dd-MM-yyyy") |
-                            @task.Status
-                        </p>
+                                @task.userName.Name |
+                                @task.DateEnd.ToString("dd-MM-yyyy") |
+                                @task.Status |
+                                @task.Score
+                            </p>
+                        </div>
+                        <div class="col col-lg-2 p-0 ">
+                            <a class="btn btn-outline-warning rounded-0 w-50 h-100 float-start"
+                               asp-controller="Admin" asp-action="EditTask" asp-route-id="@task.Id" asp-route-currentUserId="@user.Id">
+                                Edit!
+                            </a>
+                            <form class="w-50 h-100 p-0 float-end" method="post" asp-action="DeleteTask" asp-controller="Admin" asp-route-id="@task.Id" onclick="return confirm('Are you sure you want to delete this?')">
+                                <button type="submit" class="btn btn-outline-danger rounded-0 w-100 h-100">Delete!</button>
+                            </form>
+                        </div>
                     </div>
-                    <div class="col col-lg-2 p-0 ">
-                        <a class="btn btn-warning rounded-0 w-50 h-100 float-start"
-               asp-controller="Admin" asp-action="EditTask" asp-route-id="@task.Id">
-                            Edit!
-                        </a>
-                        <form class="w-50 h-100 p-0 float-end" method="post" asp-action="DeleteTask" asp-controller="Admin" asp-route-id="@task.Id" onclick="return confirm('Are you sure you want to delete this?')">
-                            <button type="submit" class="btn btn-danger rounded-0 w-100 h-100">Delete!</button>
-                        </form>
+
+                    counter++;
+                }
+            </div>
+        }
+        else if (User.IsInRole(Roles.User))
+        {
+            <div class="text-center p-1">
+                @foreach (var task in listOfTasks)
+                {
+                    <div class="row">
+                        <div class="col p-0">
+                            <a class="btn btn-outline-primary rounded-0 w-100"
+                               asp-controller="User" asp-action="TaskInformation" asp-route-id="@task.Id">
+                                @task.Name
+                            </a>
+                        </div>
+                        <div class="col col-lg-3 p-0">
+                            <p class="m-0 w-100 h-100" id="@("taskListDate" + @counter)" style="background-color: rgba(218, 155, 71, 1); color:black">
+                                @{
+                                    var FiveDaysDue = task.DateEnd.AddDays(-5);
+                                    var compareDates = DateTime.Compare(FiveDaysDue, DateTime.Today);
+                                    if (compareDates <= 0 && task.Status != Status.Done.ToString())
+                                    {
+                                        ints.Add(counter);
+                                    }
+                                }
+                                @task.userName.Name |
+                                @task.DateEnd.ToString("dd-MM-yyyy") |
+                                @task.Status |
+                                @task.Score
+                            </p>
+                        </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
+        }
+        <script type="text/javascript" src="~/js/taskDanger.js" data-m="@Html.Raw(Json.Serialize(ints.ToArray()))"></script>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-header">
+                No Tasks Yet
+            </div>
         </div>
     }
-    else if (User.IsInRole(Roles.User))
-    {
-        <div class="text-center p-1">
-            @foreach (var task in userTasks)
-            {
-                <div class="row">
-                    <div class="col p-0">
-                        <a class="btn btn-primary rounded-0 w-100"
-               asp-controller="User" asp-action="TaskInformation" asp-route-id="@task.Id">
-                            @task.Name
-                        </a>
-                    </div>
-                    <div class="col col-lg-3 p-0">
-                        <p class="bg-primary m-0 w-100 h-100" id="taskListDate">
-                            @{
-                                var FiveDaysDue = task.DateEnd.AddDays(-5);
-                                var compareDates = DateTime.Compare(FiveDaysDue, DateTime.Today);
-                                if (compareDates <= 0 && task.Status != Status.Done.ToString())
-                                {
-                                    <script>
-                                        $(document).ready(function () {
-                                            $("#taskListDate").toggleClass("bg-primary");
-                                            $("#taskListDate").toggleClass("bg-danger");
-                                        });</script>
-                                }
-                            }
-                            @task.userName.Name |
-                            @task.DateEnd.ToString("dd-MM-yyyy") |
-                            @task.Status
-                        </p>
-                    </div>
-                </div>
-            }
-        </div>
-    }
-}
-else
-{
-    <div class="card">
-        <div class="card-header">
-            No Tasks Yet
-        </div>
-    </div>
-}
+</div>

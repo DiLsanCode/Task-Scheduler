@@ -1,59 +1,92 @@
-﻿@using TaskApp.Business.dto;
+﻿@using Microsoft.AspNetCore.Identity;
+@using TaskApp.Business.dto;
+@using TaskList.Business.Constants;
+@using TaskList.Data.Models;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 @model dtoTask
 @{
     ViewData["Title"] = "Add New Task";
+    User user = await UserManager.GetUserAsync(User);
 }
 
-<div class="row" style="display:flex; justify-content: center; align-items: center">
-    <div class="col-md-4">
-        <form method="post">
-            <h2>@ViewData["Title"]</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating mb-2">
-                <input asp-for="Name" class="form-control" autocomplete="off" aria-required="true" placeholder="name" />
-                <label asp-for="Name"></label>
-                <span asp-validation-for="Name" class="text-danger"></span>
+@if (User.IsInRole(Roles.Admin))
+{
+    <div id="task-box">
+        <div class="row" style="display:flex; justify-content: center; align-items: center">
+            <div class="col-md-4">
+                <form method="post">
+                    <h2 class="text-muted">@ViewData["Title"]</h2>
+                    <hr class="text-muted" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-floating mb-2">
+                        <input asp-for="Name" class="form-control" autocomplete="off" aria-required="true" placeholder="name" />
+                        <label asp-for="Name"></label>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-2" style="display:none">
+                        <input asp-for="SprintId" class="form-control" autocomplete="off" aria-required="true" placeholder="projectid" value="@ViewBag.currentSprintId.Id" />
+                        <label asp-for="SprintId"></label>
+                        <span asp-validation-for="SprintId" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <select class="form-control" asp-for="UserId" asp-items="@(new SelectList(ViewBag.userList,"Id","Name"))">
+                            <option disabled selected="selected"></option>
+                        </select>
+                        <label asp-for="UserId"></label>
+                        <span asp-validation-for="UserId" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <select class="form-control" asp-for="Status" asp-items="@(new SelectList(ViewBag.statusList,"Name","Name"))">
+                            <option disabled selected="selected"></option>
+                        </select>
+                        <label asp-for="Status"></label>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input asp-for="DateStart" type="date" class="form-control" autocomplete="off" aria-required="true" placeholder="datestart" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                        <label asp-for="DateStart"></label>
+                        <span asp-validation-for="DateStart" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input asp-for="DateEnd" class="form-control" autocomplete="off" aria-required="true" placeholder="dateend" min="@DateTime.Now.ToString("yyyy-MM-dd HH:mm")" />
+                        <label asp-for="DateEnd"></label>
+                        <span asp-validation-for="DateEnd" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <select class="form-control" asp-for="Score" asp-items="@(new SelectList(ViewBag.fibonacciNumbers))">
+                            <option disabled selected="selected"></option>
+                        </select>
+                        <label asp-for="Score"></label>
+                        <span asp-validation-for="Score" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <textarea asp-for="Description" class="form-control h-100" aria-required="true" placeholder="description" rows="10"></textarea>
+                        <label asp-for="Description"></label>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="errors">
+                        @if (ViewBag.errors != null)
+                        {
+                            @foreach (var error in ViewBag.errors)
+                            {
+                                <p class="alert-danger">@error.ErrorMessage</p>
+                            }
+                        }
+                    </div>
+                    <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary mb-2">Add</button>
+                    <a class="w-100 btn btn-outline-dark mb-2 text-muted" asp-area="" asp-controller="User" asp-action="ListOfAllTasksFromProject" asp-route-sprintId="@ViewBag.currentSprintId.Id" asp-route-userId="@user.Id">Cancel</a>
+                </form>
             </div>
-            <div class="form-floating mb-2" style="display:none">
-                <input asp-for="ProjectId" class="form-control" autocomplete="off" aria-required="true" placeholder="projectid" value="@ViewBag.currentProjectId" />
-                <label asp-for="ProjectId"></label>
-                <span asp-validation-for="ProjectId" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-2">
-                <select class="form-control" asp-for="UserId" asp-items="@(new SelectList(ViewBag.userList,"Id","Name"))">
-                    <option disabled selected="selected"></option>
-                </select>
-                <label asp-for="UserId"></label>
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-2">
-                <select class="form-control" asp-for="Status" asp-items="@(new SelectList(ViewBag.statusList,"Name","Name"))">
-                    <option disabled selected="selected"></option>
-                </select>
-                <label asp-for="Status"></label>
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-2">
-                <input asp-for="DateStart" type="date" class="form-control" autocomplete="off" aria-required="true" placeholder="datestart" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
-                <label asp-for="DateStart"></label>
-                <span asp-validation-for="DateStart" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-2">
-                <input asp-for="DateEnd" class="form-control" autocomplete="off" aria-required="true" placeholder="dateend" min="@DateTime.Now.ToString("yyyy-MM-dd HH:mm")" />
-                <label asp-for="DateEnd"></label>
-                <span asp-validation-for="DateEnd" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-2">
-                <textarea asp-for="Description" class="form-control h-100" aria-required="true" placeholder="description" rows="10"></textarea>
-                <label asp-for="Description"></label>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary mb-2">Add</button>
-            <a class="w-100 btn btn-outline-dark mb-2" asp-area="" asp-controller="User" asp-action="ListOfAllTasksFromProject" asp-route-projectId="@ViewBag.currentProjectId">Cancel</a>
-        </form>
+        </div>
     </div>
-</div>
+}
+else
+{
+    <div class="error">
+        <h1 class="text-danger">You do not have permission!</h1>
+    </div>
+}
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
