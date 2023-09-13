@@ -14,7 +14,12 @@
     @RenderSection("JavaScript", required: false)
 </head>
 @{
-    var pageName = ViewContext.RouteData.Values["action"].ToString();
+    var pageLoaded = ViewContext.RouteData.Values["action"];
+    string pageName = "null";
+    if (pageLoaded != null)
+    {
+        pageName = pageLoaded.ToString();
+    }
 }
 <body>
     <header>
@@ -29,25 +34,25 @@
                     <ul class="navbar-nav flex-grow-1">
                         @if (User.IsInRole(Roles.Admin))
                         {
-                                <li>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Admin
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item"
-                                               asp-controller="Admin" asp-action="AddNewProject">
-                                                    Add New Project
-                                                </a>
-                                            </li>
+                            <li>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Admin
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item"
+                                           asp-controller="Admin" asp-action="AddNewProject">
+                                                Add New Project
+                                            </a>
+                                        </li>
                                         @switch (pageName)
                                         {
                                             case "Sprints":
                                                 <li><hr class="dropdown-divider"></li>
                                                 <li>
                                                     <a class="dropdown-item" style="width:auto"
-                                                       asp-controller="Admin" asp-action="AddNewSprint" asp-route-id="@ViewBag.currentProjectId">
+                                           asp-controller="Admin" asp-action="AddNewSprint" asp-route-id="@ViewBag.currentProjectId">
                                                         Add New Sprint
                                                     </a>
                                                 </li>
@@ -57,7 +62,7 @@
                                                 <li><hr class="dropdown-divider"></li>
                                                 <li>
                                                     <a class="dropdown-item" style="width:auto"
-                                                       asp-controller="Admin" asp-action="AddNewTaskToProject" asp-route-id="@ViewBag.currentSprintId">
+                                           asp-controller="Admin" asp-action="AddNewTaskToProject" asp-route-id="@ViewBag.currentSprintId">
                                                         Add New Task
                                                     </a>
                                                 </li>
@@ -66,18 +71,18 @@
                                             default:
                                                 break;
                                         }
-                                        
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li>
-                                                <a class="dropdown-item" style="width:auto"
-                                               asp-controller="Admin" asp-action="TaskBoard">
-                                                    Go To Board
-                                                </a>
-                                            </li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li>
-                                                <a class="dropdown-item" style="width:auto"
-                                                asp-area="Identity" asp-page="/Account/Register">
+
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item" style="width:auto"
+                                           asp-controller="Admin" asp-action="TaskBoard">
+                                                Go To Board
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item" style="width:auto"
+                                           asp-area="Identity" asp-page="/Account/Register">
                                                 Register
                                             </a>
                                             </li>

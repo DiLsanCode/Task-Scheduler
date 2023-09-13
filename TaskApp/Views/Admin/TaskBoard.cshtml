@@ -11,38 +11,48 @@
 
     var sortedList = listOfTasks.OrderBy(x => x.Name).ToList();
 }
-<div id="task-box">
-    @if (Model.Any())
-    {
-        if (User.IsInRole(Roles.Admin))
+
+@if (User.IsInRole(Roles.Admin))
+{
+    <div id="task-box">
+        @if (Model.Any())
         {
-            <div class="text-center p-1">
-                @foreach (var task in listOfTasks)
-                {
-                    <div class="row">
-                        <div class="col p-0">
-                            <a class="btn btn-outline-primary rounded-0 w-100"
-                               asp-controller="User" asp-action="TaskInformation" asp-route-id="@task.Id">
-                                @task.Name
-                            </a>
+            if (User.IsInRole(Roles.Admin))
+            {
+                <div class="text-center p-1">
+                    @foreach (var task in listOfTasks)
+                    {
+                        <div class="row">
+                            <div class="col p-0">
+                                <a class="btn btn-outline-primary rounded-0 w-100"
+                   asp-controller="User" asp-action="TaskInformation" asp-route-id="@task.Id">
+                                    @task.Name
+                                </a>
+                            </div>
+                            <div class="col col-lg-3 p-0">
+                                <p class="m-0 w-100 h-100" style="background-color: rgba(218, 155, 71, 1); color:black">
+                                    @task.userName.Name |
+                                    @task.Status
+                                </p>
+                            </div>
                         </div>
-                        <div class="col col-lg-3 p-0">
-                            <p class="m-0 w-100 h-100" style="background-color: rgba(218, 155, 71, 1); color:black">
-                                @task.userName.Name |
-                                @task.Status
-                            </p>
-                        </div>
-                    </div>
-                }
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <div class="card">
+                <div class="card-header">
+                    No Tasks Yet
+                </div>
             </div>
         }
-    }
-    else
-    {
-        <div class="card">
-            <div class="card-header">
-                No Tasks Yet
-            </div>
-        </div>
-    }
-</div>
+    </div>
+}
+else
+{
+    <div class="error">
+        <h1 class="text-danger">You do not have permission!</h1>
+    </div>
+}

@@ -1,47 +1,57 @@
 ﻿@using TaskApp.Business.dto
+@using TaskList.Business.Constants;
 @model dtoSprint
 @{
     ViewData["Title"] = "Edit Sprint";
 }
 
-<div id="task-box">
-    <h1 style="display:flex; justify-content: center; align-items: center" class="text-muted">@ViewData["Title"]</h1>
+@if (User.IsInRole(Roles.Admin))
+{
+    <div id="task-box">
+        <h1 style="display:flex; justify-content: center; align-items: center" class="text-muted">@ViewData["Title"]</h1>
 
-    <div class="row" style="display:flex; justify-content: center; align-items: center">
-        <div class="col-md-4">
-            <form method="post">
-                <hr class="text-muted"/>
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-floating mb-2">
-                    <input asp-for="Name" class="form-control" autocomplete="off" aria-required="true" placeholder="name" value="@Model.Name" />
-                    <label asp-for="Name"></label>
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div class="form-floating mb-2">
-                    <select class="form-control" asp-for="ProjectId" asp-items="@(new SelectList(ViewBag.projectList,"Id","Name"))">
-                        <option selected="selected">
-                            @Model.ProjectId
-                        </option>
-                    </select>
-                    <label asp-for="ProjectId"></label>
-                    <span asp-validation-for="ProjectId" class="text-danger"></span>
-                </div>
-                <div class="errors">
-                    @if (ViewBag.errors != null)
-                    {
-                        @foreach (var error in ViewBag.errors)
+        <div class="row" style="display:flex; justify-content: center; align-items: center">
+            <div class="col-md-4">
+                <form method="post">
+                    <hr class="text-muted" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-floating mb-2">
+                        <input asp-for="Name" class="form-control" autocomplete="off" aria-required="true" placeholder="name" value="@Model.Name" />
+                        <label asp-for="Name"></label>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <select class="form-control" asp-for="ProjectId" asp-items="@(new SelectList(ViewBag.projectList,"Id","Name"))">
+                            <option selected="selected">
+                                @Model.ProjectId
+                            </option>
+                        </select>
+                        <label asp-for="ProjectId"></label>
+                        <span asp-validation-for="ProjectId" class="text-danger"></span>
+                    </div>
+                    <div class="errors">
+                        @if (ViewBag.errors != null)
                         {
-                            <p class="alert-danger">@error.ErrorMessage</p>
+                            @foreach (var error in ViewBag.errors)
+                            {
+                                <p class="alert-danger">@error.ErrorMessage</p>
+                            }
                         }
-                    }
-                </div>
-                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary mb-2">Edit</button>
-                <a class="w-100 btn btn-outline-dark mb-2 text-muted" asp-area="" asp-controller="User" asp-action="Sprints" asp-route-projectId="@Model.ProjectId">Cancel</a>
-            </form>
+                    </div>
+                    <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary mb-2">Edit</button>
+                    <a class="w-100 btn btn-outline-dark mb-2 text-muted" asp-area="" asp-controller="User" asp-action="Sprints" asp-route-projectId="@Model.ProjectId">Cancel</a>
+                </form>
+            </div>
         </div>
     </div>
-</div>
+}
+else
+{
+    <div class="error">
+        <h1 class="text-danger">You do not have permission!</h1>
+    </div>
+}
 
 @section Scripts {
-        <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }

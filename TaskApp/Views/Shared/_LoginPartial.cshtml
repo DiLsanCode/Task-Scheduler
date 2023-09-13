@@ -10,7 +10,7 @@
         var lastName = user.LastName;
         <li class="nav-item">
             @*<a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>*@
-            <a class="nav-link text-muted" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @lastName!</a>
+            <a class="nav-link text-muted" asp-area="Identity" asp-page="/Account/Manage/ChangePassword" title="Manage">Hello @lastName!</a>
         </li>
         <li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("ListOfAllProjects", "User", new { area = "" })">

@@ -164,7 +164,7 @@ namespace VotingApp.ApplicationInitializer
         {
             string[] firstName = { "Антон", "Алекса", "Звездиян", "Добринка", "Спартак", "Николет" };
             string[] middleName = { "Николов", "Георгиева", "Божинов", "Каменова", "Андреев", "Попова" };
-            string[] lastName = { "Котев", "Арнаудова", "Събев", "Михайлова", "Пешев", "Иванова" };
+            string[] lastName = { "Иванов", "Арнаудова", "Събев", "Михайлова", "Пешев", "Иванова" };
 
             if (await _dbContext.Users.AnyAsync())
             {
